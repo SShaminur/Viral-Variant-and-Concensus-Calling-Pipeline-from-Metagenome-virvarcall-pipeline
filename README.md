@@ -69,7 +69,7 @@ Host reference genome (optional, for filtering)
 📊 Output Files
 For each sample {sample}, the pipeline generates:
 
-File	Description
+#File	Description
 {sample}_consensus.fasta	Consensus sequence with low-coverage masking
 {sample}_SNPs.tsv	SNP report with variant typing
 {sample}_coverage.tsv	Coverage statistics across genome
