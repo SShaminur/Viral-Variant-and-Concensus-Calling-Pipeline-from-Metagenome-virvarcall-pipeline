@@ -1,36 +1,45 @@
-#Viral Variant Calling Pipeline from Metagenome (VirVarCall)
-VirVarCall is a comprehensive, robust, and flexible bioinformatics pipeline designed for viral variant calling and consensus sequence generation from paired-end sequencing data. The pipeline processes raw FASTQ files through quality control, host filtering, alignment, variant calling, and generates multiple output formats for downstream analysis.
+# Viral Variant Calling Pipeline from Metagenome (VirVarCall)
 
-#Features
-##End-to-end Processing: Quality trimming, host read removal, alignment, variant calling, and consensus generation
+**VirVarCall** is a comprehensive, robust, and flexible bioinformatics pipeline designed for viral variant calling and consensus sequence generation from paired-end sequencing data. The pipeline processes raw FASTQ files through quality control, host filtering, alignment, variant calling, and generates multiple output formats for downstream analysis.
 
-##Flexible Host Filtering: Supports both bbduk and bowtie2 with automatic fallback
+## 🚀 Features
 
-##Comprehensive Output: Consensus sequences, SNP reports, coverage statistics, and frequency profiles
+- **End-to-end Processing**: Quality trimming, host read removal, alignment, variant calling, and consensus generation
+- **Flexible Host Filtering**: Supports both bbduk and bowtie2 with automatic fallback
+- **Comprehensive Output**: Consensus sequences, SNP reports, coverage statistics, and frequency profiles
+- **Robust Error Handling**: Comprehensive logging and error recovery mechanisms
+- **Resource Optimization**: Configurable memory and thread usage with automatic resource scaling
+- **Quality Control**: Multiple QC checkpoints and validation steps
 
-##Robust Error Handling: Comprehensive logging and error recovery mechanisms
+## 📋 Requirements
 
-##Resource Optimization: Configurable memory and thread usage with automatic resource scaling
+### **Bioinformatics Tools**
 
-##Quality Control: Multiple QC checkpoints and validation steps
-
-#Requirements
-Bioinformatics Tools
-bash
+```bash
 # Core tools
-*trimmomatic*
-*bwa*
-*samtools*
-*bcftools*
-*freebayes*
+trimmomatic
+bwa
+samtools
+bcftools
+freebayes
 
 # Host filtering (one of these)
-*bbduk.sh*  # from BBMap
+bbduk.sh  # from BBMap
+bowtie2
 
-#Optional host reference for filtering (human, mouse, etc.)
+# Standard Unix tools
+awk
+sed
+gzip
+```
 
-#Installation
-*bash*
+### **Reference Genomes**
+- **Viral target reference** (FASTA format)
+- **Optional host reference** for filtering (human, mouse, etc.)
+
+## 🛠️ Installation
+
+```bash
 # Clone repository
 git clone https://github.com/yourusername/viral-variant-pipeline
 cd viral-variant-pipeline
@@ -41,12 +50,17 @@ chmod +x pipeline.sh
 # Install dependencies (example with conda)
 conda create -n virvarcall trimmomatic bwa samtools bcftools freebayes bbmap bowtie2
 conda activate virvarcall
-🎯 Quick Start
-Basic Usage
-bash
+```
+
+## 🎯 Quick Start
+
+### Basic Usage
+```bash
 ./pipeline.sh
-Advanced Usage
-bash
+```
+
+### Advanced Usage
+```bash
 # Run with custom resources
 ./pipeline.sh --threads 32 --memory 80g
 
@@ -58,36 +72,47 @@ bash
 
 # Use custom host reference
 ./pipeline.sh --host-ref /path/to/host.fasta
-📁 Input Requirements
-File Naming Convention
-bash
+```
+
+## 📁 Input Requirements
+
+### **File Naming Convention**
+```bash
 # Forward reads
 {sample}_R1.fastq.gz
 
 # Reverse reads  
 {sample}_R2.fastq.gz
-Required Files
-bash
+```
+
+### **Required Files**
+```bash
 # Viral reference genome (configurable)
 NC_003977.fasta
 
 # Host reference genome (optional, for filtering)
 /path/to/host_reference.fasta
-📊 Output Files
-For each sample {sample}, the pipeline generates:
+```
 
-File	Description
-{sample}_consensus.fasta	Consensus sequence with low-coverage masking
-{sample}_SNPs.tsv	SNP report with variant typing
-{sample}_coverage.tsv	Coverage statistics across genome
-{sample}_frequency_report.tsv	Base-by-base frequency analysis
-{sample}_filtered_variants.tsv	Filtered variant calls
-{sample}_host_filtering_report.txt	Host filtering statistics
-Various log files	Processing logs for each step
-⚙️ Configuration
-Edit the configuration section in pipeline.sh:
+## 📊 Output Files
 
-bash
+For each sample `{sample}`, the pipeline generates:
+
+| **File** | **Description** |
+|----------|----------------|
+| **`{sample}_consensus.fasta`** | Consensus sequence with low-coverage masking |
+| **`{sample}_SNPs.tsv`** | SNP report with variant typing |
+| **`{sample}_coverage.tsv`** | Coverage statistics across genome |
+| **`{sample}_frequency_report.tsv`** | Base-by-base frequency analysis |
+| **`{sample}_filtered_variants.tsv`** | Filtered variant calls |
+| **`{sample}_host_filtering_report.txt`** | Host filtering statistics |
+| **Various log files** | Processing logs for each step |
+
+## ⚙️ Configuration
+
+Edit the configuration section in `pipeline.sh`:
+
+```bash
 #!/bin/bash
 set -eo pipefail
 
@@ -117,8 +142,11 @@ HOSTFILTERDIR="Host_Filtered"
 
 # Memory settings for host filtering
 BBDUK_MEMORY="100g"
-🔧 Pipeline Steps
-bash
+```
+
+## 🔧 Pipeline Steps
+
+```bash
 # 1. Quality Trimming - Trimmomatic for adapter removal
 trimmomatic PE -threads $THREADS input_R1.fastq.gz input_R2.fastq.gz ...
 
@@ -141,15 +169,21 @@ bcftools view -i "QUAL>20 & INFO/DP>2" variants.vcf.gz
 bcftools consensus -f "$REF_GENOME" -m lowcov.bed filtered.vcf.gz
 
 # 8. Report Generation - Comprehensive output files
-🧬 Consensus Generation
-The pipeline provides flexible consensus generation options using bcftools consensus:
+```
 
-Goal	Keep Reference	Mask Low-Coverage	Remove Reference
-Command	-H 1	-H 1 -m lowcov.bed	-H A --missing '-'
-Output	full consensus	consensus with Ns	variants-only
-Ref. bases kept?	✅ Yes	✅ except masked	❌ No
-Consensus Modes Explained:
-bash
+## 🧬 Consensus Generation
+
+The pipeline provides flexible consensus generation options using `bcftools consensus`:
+
+| **Goal** | **Keep Reference** | **Mask Low-Coverage** | **Remove Reference** |
+|----------|-------------------|----------------------|---------------------|
+| **Command** | `-H 1` | `-H 1 -m lowcov.bed` | `-H A --missing '-'` |
+| **Output** | full consensus | consensus with Ns | variants-only |
+| **Ref. bases kept?** | ✅ Yes | ✅ except masked | ❌ No |
+
+### **Consensus Modes Explained:**
+
+```bash
 # 1. Full Consensus (-H 1)
 # Purpose: Generate complete consensus sequence
 # Behavior: Uses reference bases where no variants are called
@@ -164,8 +198,10 @@ bcftools consensus -f reference.fasta -H 1 -m lowcov.bed filtered.vcf.gz
 # Purpose: Extract only variant positions
 # Behavior: Outputs only positions with called variants  
 bcftools consensus -f reference.fasta -H A --missing '-' filtered.vcf.gz
-Low-Coverage Masking:
-bash
+```
+
+### **Low-Coverage Masking:**
+```bash
 # Threshold: Configurable via MIN_DEPTH parameter (default: 1)
 MIN_DEPTH=1
 
@@ -173,9 +209,13 @@ MIN_DEPTH=1
 awk -v min=$MIN_DEPTH '$3 < min {print $1 "\t" $2-1 "\t" $2}' sample_depth.txt > sample_lowcov.bed
 
 # File: Generated as {sample}_lowcov.bed during pipeline execution
-🐛 Troubleshooting
-Common Issues
-bash
+```
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+```bash
 # 1. Memory errors - Use --memory to adjust allocation
 ./pipeline.sh --memory 120g
 
@@ -188,8 +228,10 @@ samtools flagstat sample.sorted.bam
 
 # 4. Empty outputs - Check error logs
 cat pipeline_errors.log
-Check Logs
-bash
+```
+
+### **Check Logs**
+```bash
 # Main error log
 cat pipeline_errors.log
 
@@ -201,8 +243,11 @@ cat Results/*_trimmomatic.log
 
 # Alignment logs
 cat Results/*_alignment.log
-📝 Command Line Options
-bash
+```
+
+## 📝 Command Line Options
+
+```bash
 ./pipeline.sh [options]
 
 Options:
@@ -219,8 +264,11 @@ Examples:
   ./pipeline.sh --no-host-filter
   ./pipeline.sh --host-ref /path/to/host_genome.fasta --memory 120g
   ./pipeline.sh --threads 40 --memory 80g
-🎓 Example Workflow
-bash
+```
+
+## 🎓 Example Workflow
+
+```bash
 # 1. Prepare your data
 # Place paired-end FASTQ files in working directory
 ls -1 *.fastq.gz
@@ -246,16 +294,21 @@ head -20 Results/Sample1_consensus.fasta
 
 # 7. View SNP report
 head Results/Sample1_SNPs.tsv
-🤝 Contributing
+```
+
+## 🤝 Contributing
+
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
-📄 License
+## 📄 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-📞 Support
+## 📞 Support
+
 For issues and questions:
 
-bash
+```bash
 # 1. Check the main error log
 cat pipeline_errors.log
 
@@ -268,4 +321,8 @@ which trimmomatic bwa samtools bcftools freebayes
 # 4. Check input file formats
 file *.fastq.gz
 file NC_003977.fasta
-Note: This pipeline is designed for viral genomics research and requires appropriate computational resources for optimal performance.
+```
+
+---
+
+**Note**: This pipeline is designed for viral genomics research and requires appropriate computational resources for optimal performance.
