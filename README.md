@@ -45,7 +45,7 @@ git clone https://github.com/yourusername/viral-variant-pipeline
 cd viral-variant-pipeline
 
 # Make script executable
-chmod +x pipeline.sh
+chmod +x VirVarCall.sh
 
 # Install dependencies (example with conda)
 conda create -n virvarcall trimmomatic bwa samtools bcftools freebayes bbmap bowtie2
@@ -56,22 +56,22 @@ conda activate virvarcall
 
 ### Basic Usage
 ```bash
-./pipeline.sh
+./VirVarCall.sh
 ```
 
 ### Advanced Usage
 ```bash
 # Run with custom resources
-./pipeline.sh --threads 32 --memory 80g
+./VirVarCall.sh --threads 32 --memory 80g
 
 # Skip trimming and keep intermediates
-./pipeline.sh --skip-trim --keep-intermediates
+./VirVarCall.sh --skip-trim --keep-intermediates
 
 # Disable host filtering
-./pipeline.sh --no-host-filter
+./VirVarCall.sh --no-host-filter
 
 # Use custom host reference
-./pipeline.sh --host-ref /path/to/host.fasta
+./VirVarCall.sh --host-ref /path/to/host.fasta
 ```
 
 ## 📁 Input Requirements
@@ -110,7 +110,7 @@ For each sample `{sample}`, the pipeline generates:
 
 ## ⚙️ Configuration
 
-Edit the configuration section in `pipeline.sh`:
+Edit the configuration section in `VirVarCall.sh`:
 
 ```bash
 #!/bin/bash
@@ -217,7 +217,7 @@ awk -v min=$MIN_DEPTH '$3 < min {print $1 "\t" $2-1 "\t" $2}' sample_depth.txt >
 
 ```bash
 # 1. Memory errors - Use --memory to adjust allocation
-./pipeline.sh --memory 120g
+./VirVarCall.sh --memory 120g
 
 # 2. Host filtering failures - Check available tools
 which bbduk.sh
@@ -248,7 +248,7 @@ cat Results/*_alignment.log
 ## 📝 Command Line Options
 
 ```bash
-./pipeline.sh [options]
+./VirVarCall.sh [options]
 
 Options:
   --skip-trim          Skip trimming step (use existing trimmed files)
@@ -260,10 +260,10 @@ Options:
   -h, --help           Show help message
 
 Examples:
-  ./pipeline.sh --skip-trim --keep-intermediates
-  ./pipeline.sh --no-host-filter
-  ./pipeline.sh --host-ref /path/to/host_genome.fasta --memory 120g
-  ./pipeline.sh --threads 40 --memory 80g
+  ./VirVarCall.sh --skip-trim --keep-intermediates
+  ./VirVarCall.sh --no-host-filter
+  ./VirVarCall.sh --host-ref /path/to/host_genome.fasta --memory 120g
+  ./VirVarCall.sh --threads 40 --memory 80g
 ```
 
 ## 🎓 Example Workflow
@@ -281,7 +281,7 @@ ls -1 *.fastq.gz
 cp your_virus.fasta NC_003977.fasta
 
 # 3. Run pipeline with optimal settings
-./pipeline.sh --threads 32 --memory 80g --keep-intermediates
+./VirVarCall.sh --threads 32 --memory 80g --keep-intermediates
 
 # 4. Check results
 ls -la Results/
