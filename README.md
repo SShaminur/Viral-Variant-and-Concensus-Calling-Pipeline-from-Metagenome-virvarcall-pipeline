@@ -1,44 +1,36 @@
-Viral Variant Calling Pipeline from Metagenome (VirVarCall)
+#Viral Variant Calling Pipeline from Metagenome (VirVarCall)
 VirVarCall is a comprehensive, robust, and flexible bioinformatics pipeline designed for viral variant calling and consensus sequence generation from paired-end sequencing data. The pipeline processes raw FASTQ files through quality control, host filtering, alignment, variant calling, and generates multiple output formats for downstream analysis.
 
-🚀 Features
-End-to-end Processing: Quality trimming, host read removal, alignment, variant calling, and consensus generation
+#Features
+##End-to-end Processing: Quality trimming, host read removal, alignment, variant calling, and consensus generation
 
-Flexible Host Filtering: Supports both bbduk and bowtie2 with automatic fallback
+##Flexible Host Filtering: Supports both bbduk and bowtie2 with automatic fallback
 
-Comprehensive Output: Consensus sequences, SNP reports, coverage statistics, and frequency profiles
+##Comprehensive Output: Consensus sequences, SNP reports, coverage statistics, and frequency profiles
 
-Robust Error Handling: Comprehensive logging and error recovery mechanisms
+##Robust Error Handling: Comprehensive logging and error recovery mechanisms
 
-Resource Optimization: Configurable memory and thread usage with automatic resource scaling
+##Resource Optimization: Configurable memory and thread usage with automatic resource scaling
 
-Quality Control: Multiple QC checkpoints and validation steps
+##Quality Control: Multiple QC checkpoints and validation steps
 
-📋 Requirements
+#Requirements
 Bioinformatics Tools
 bash
 # Core tools
-trimmomatic
-bwa
-samtools
-bcftools
-freebayes
+*trimmomatic*
+*bwa*
+*samtools*
+*bcftools*
+*freebayes*
 
 # Host filtering (one of these)
-bbduk.sh  # from BBMap
-bowtie2
+*bbduk.sh*  # from BBMap
 
-# Standard Unix tools
-awk
-sed
-gzip
-Reference Genomes
-Viral target reference (FASTA format)
+#Optional host reference for filtering (human, mouse, etc.)
 
-Optional host reference for filtering (human, mouse, etc.)
-
-🛠️ Installation
-bash
+#Installation
+*bash*
 # Clone repository
 git clone https://github.com/yourusername/viral-variant-pipeline
 cd viral-variant-pipeline
