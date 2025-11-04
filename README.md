@@ -1,2 +1,2 @@
-# Viral-Variant-and-Concensus-Calling-Pipeline-from-Metagenome-virvarcall-pipeline
+# Viral Variant Calling Pipeline from Metagenome-virvarcall
 VirVarCall is a comprehensive, robust, and flexible bioinformatics pipeline designed for viral variant calling and consensus sequence generation from paired-end sequencing data. The pipeline processes raw FASTQ files through quality control, host filtering, alignment, variant calling, and generates multiple output formats for downstream analysis.
